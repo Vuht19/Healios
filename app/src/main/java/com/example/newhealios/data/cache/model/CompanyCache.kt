@@ -2,7 +2,7 @@ package com.example.newhealios.data.cache.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Company(
+data class CompanyCache(
     var nameCompany: String,
     var catchPhrase: String,
     var bs: String,

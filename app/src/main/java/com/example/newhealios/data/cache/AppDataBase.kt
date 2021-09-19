@@ -2,18 +2,15 @@ package com.example.newhealios.data.cache
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.newhealios.data.cloud.api.response.CommentResponse
-import com.example.newhealios.data.cloud.api.response.PostResponse
 import com.example.newhealios.data.cache.dao.CommentDao
 import com.example.newhealios.data.cache.dao.PostDao
 import com.example.newhealios.data.cache.dao.UserDao
-import com.example.newhealios.data.cache.model.Comment
-import com.example.newhealios.data.cache.model.Post
-import com.example.newhealios.data.cache.model.User
-import com.example.newhealios.data.cloud.api.response.UserResponse
+import com.example.newhealios.data.cache.model.CommentCache
+import com.example.newhealios.data.cache.model.PostCache
+import com.example.newhealios.data.cache.model.UserCache
 
 @Database(
-    entities = [Post::class, User::class, Comment::class],
+    entities = [PostCache::class, UserCache::class, CommentCache::class],
     version = 1
 )
 abstract class AppDatabase : RoomDatabase() {

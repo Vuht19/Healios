@@ -1,4 +1,4 @@
-package com.example.newhealios.data.cache.model
+package com.example.newhealios.domain.model
 
 data class Geo(
     var lat: String,

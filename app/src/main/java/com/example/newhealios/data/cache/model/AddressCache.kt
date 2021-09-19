@@ -3,15 +3,15 @@ package com.example.newhealios.data.cache.model
 import androidx.room.Embedded
 
 
-data class Address(
+data class AddressCache(
     var street: String,
     var suite: String,
     var zipcode: String,
     @Embedded
-    var geo: Geo,
+    var geoCache: GeoCache,
 ) {
     override fun toString(): String {
-        return "Address(street='$street', suite='$suite', zipcode='$zipcode', geo=$geo)"
+        return "Address(street='$street', suite='$suite', zipcode='$zipcode', geo=$geoCache)"
     }
 }
 

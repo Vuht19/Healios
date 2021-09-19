@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "comments")
-data class Comment(
+data class CommentCache(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
     var postId: Int,

@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "users")
-data class User(
+data class UserCache(
     @PrimaryKey(autoGenerate = true)
     var idLocal: Int?,
     var idUser: Int?,
@@ -15,7 +15,7 @@ data class User(
     var phone: String?,
     var website: String?,
     @Embedded
-    var address: Address?,
+    var addressCache: AddressCache?,
     @Embedded
-    var company: Company?,
+    var companyCache: CompanyCache?,
 )
