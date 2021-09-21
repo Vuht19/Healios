@@ -1,6 +1,7 @@
 package com.example.newhealios.data.cache.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.newhealios.data.cache.model.CommentCache
@@ -16,4 +17,7 @@ interface CommentDao {
 
     @Query("SELECT * FROM comments WHERE postId=:id")
     fun getCommentsById(id: Int): List<CommentCache>
+
+    @Query("DELETE FROM comments")
+    fun deleteAll()
 }

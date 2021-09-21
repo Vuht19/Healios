@@ -46,6 +46,7 @@ class HealiosRepository @Inject constructor(
     * Local
     * */
     fun savePostDataInCache(postCacheList: List<PostCache>) {
+        appDatabase.postDao()?.deleteAll()
         appDatabase.postDao()?.insertAll(postCacheList)
     }
 
@@ -54,10 +55,12 @@ class HealiosRepository @Inject constructor(
     }
 
     fun saveUserDataInCache(userCacheList: List<UserCache>) {
+        appDatabase.userDao()?.deleteAll()
         appDatabase.userDao()?.insertAll(userCacheList)
     }
 
     fun saveCommentDataInCache(commentList: List<CommentCache>) {
+        appDatabase.commentDao()?.deleteAll()
         appDatabase.commentDao()?.insertAll(commentList)
     }
 
