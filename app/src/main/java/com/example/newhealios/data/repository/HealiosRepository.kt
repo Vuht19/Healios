@@ -2,17 +2,14 @@ package com.example.newhealios.data.repository
 
 import com.example.newhealios.data.base.ResultWrapper
 import com.example.newhealios.data.base.safeApiCall
-import com.example.newhealios.data.cache.AppDatabase
-import com.example.newhealios.data.cache.model.CommentCache
-import com.example.newhealios.data.cache.model.PostCache
-import com.example.newhealios.data.cache.model.UserCache
-import com.example.newhealios.data.cloud.api.response.CommentResponse
-import com.example.newhealios.data.cloud.api.response.PostResponse
-import com.example.newhealios.data.cloud.api.response.UserResponse
-import com.example.newhealios.data.cloud.service.HealiosService
-import com.example.newhealios.domain.mapper.Mapper
-import com.example.newhealios.domain.model.Comment
-import com.example.newhealios.domain.model.User
+import com.example.newhealios.data.database.AppDatabase
+import com.example.newhealios.data.database.model.EntityComment
+import com.example.newhealios.data.database.model.EntityPost
+import com.example.newhealios.data.database.model.EntityUser
+import com.example.newhealios.data.network.api.response.DtoComment
+import com.example.newhealios.data.network.api.response.DtoPost
+import com.example.newhealios.data.network.api.response.DtoUser
+import com.example.newhealios.data.network.service.HealiosService
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
@@ -24,19 +21,19 @@ class HealiosRepository @Inject constructor(
     /**
      * Cloud
      * */
-    suspend fun getListUser(): ResultWrapper<List<UserResponse>> {
+    suspend fun getListUser(): ResultWrapper<List<DtoUser>> {
         return safeApiCall(dispatcher) {
             healiosService.getUsers()
         }
     }
 
-    suspend fun getLisComment(): ResultWrapper<List<CommentResponse>> {
+    suspend fun getLisComment(): ResultWrapper<List<DtoComment>> {
         return safeApiCall(dispatcher) {
             healiosService.getComments()
         }
     }
 
-    suspend fun getListPost(): ResultWrapper<List<PostResponse>> {
+    suspend fun getListPost(): ResultWrapper<List<DtoPost>> {
         return safeApiCall(dispatcher) {
             healiosService.getPost()
         }
@@ -45,30 +42,36 @@ class HealiosRepository @Inject constructor(
     /*
     * Local
     * */
-    fun savePostDataInCache(postCacheList: List<PostCache>) {
-        appDatabase.postDao()?.deleteAll()
-        appDatabase.postDao()?.insertAll(postCacheList)
+    fun savePostInDatabase(postCacheList: List<EntityPost>) {
+        if (!postCacheList.isNullOrEmpty()) {
+            appDatabase.postDao()?.deleteAll()
+            appDatabase.postDao()?.insertAll(postCacheList)
+        }
     }
 
-    fun getPostListFromCache(): List<PostCache>? {
+    fun getPostListFromDatabase(): List<EntityPost>? {
         return appDatabase.postDao()?.getPostList()
     }
 
-    fun saveUserDataInCache(userCacheList: List<UserCache>) {
-        appDatabase.userDao()?.deleteAll()
-        appDatabase.userDao()?.insertAll(userCacheList)
+    fun saveUserDataInDatabase(userCacheList: List<EntityUser>) {
+        if (!userCacheList.isNullOrEmpty()) {
+            appDatabase.userDao()?.deleteAll()
+            appDatabase.userDao()?.insertAll(userCacheList)
+        }
     }
 
-    fun saveCommentDataInCache(commentList: List<CommentCache>) {
-        appDatabase.commentDao()?.deleteAll()
-        appDatabase.commentDao()?.insertAll(commentList)
+    fun saveCommentDataInDatabase(commentList: List<EntityComment>) {
+        if (!commentList.isNullOrEmpty()) {
+            appDatabase.commentDao()?.deleteAll()
+            appDatabase.commentDao()?.insertAll(commentList)
+        }
     }
 
-    fun getUserCacheById(id: Int): UserCache? {
+    fun getUserFromDatabaseById(id: Int): EntityUser? {
         return appDatabase.userDao()?.getUserById(id)
     }
 
-    fun getCommentListCacheById(id: Int): List<CommentCache>? {
+    fun getCommentListFromDatabaseById(id: Int): List<EntityComment>? {
         return appDatabase.commentDao()?.getCommentsById(id)
     }
 }

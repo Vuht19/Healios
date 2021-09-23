@@ -1,7 +1,5 @@
 package com.example.newhealios.domain.model
 
-import com.example.newhealios.data.cloud.api.response.GeoResponse
-
 data class Address(
     var street: String,
     var suite: String,

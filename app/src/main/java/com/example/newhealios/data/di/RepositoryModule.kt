@@ -1,7 +1,7 @@
 package com.example.newhealios.data.di
 
-import com.example.newhealios.data.cache.AppDatabase
-import com.example.newhealios.data.cloud.service.HealiosService
+import com.example.newhealios.data.database.AppDatabase
+import com.example.newhealios.data.network.service.HealiosService
 import com.example.newhealios.data.repository.HealiosRepository
 import dagger.Module
 import dagger.Provides

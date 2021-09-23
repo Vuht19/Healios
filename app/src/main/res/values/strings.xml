@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">NewHealios</string>
+    <string name="app_name">Healios</string>
+    <string name="txt_post_list">Post List</string>
+    <string name="txt_title">Title:</string>
+    <string name="txt_content">Content:</string>
+    <string name="txt_detail">Detail</string>
+    <string name="txt_id">ID:</string>
+    <string name="txt_name">Name:</string>
+    <string name="txt_user_name">User name:</string>
+    <string name="txt_email">Email:</string>
+    <string name="txt_address">Address:</string>
+    <string name="txt_phone">Phone:</string>
+    <string name="txt_website">Website:</string>
+    <string name="txt_company">Company:</string>
+    <string name="msg_please_wait">Please wait…</string>
+    <string name="txt_error_network">No network connection, try again later.</string>
+    <string name="txt_error_timeout">Unstable connection cannot connect to the server</string>
+    <string name="txt_error_process">There was an error in the execution process, please try again.</string>
+    <string name="txt_ok">OK</string>
+    <string name="txt_comment_list">Comment List</string>
 </resources>

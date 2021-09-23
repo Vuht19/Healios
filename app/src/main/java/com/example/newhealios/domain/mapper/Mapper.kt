@@ -1,61 +1,21 @@
 package com.example.newhealios.domain.mapper
 
-import com.example.newhealios.data.cache.model.*
-import com.example.newhealios.data.cloud.api.response.*
+import com.example.newhealios.data.database.model.*
+import com.example.newhealios.data.network.api.response.*
 import com.example.newhealios.domain.model.*
 import java.util.ArrayList
 
 object Mapper {
 
-    /**
-     * User
-     * */
-    private fun responseToSingleUser(userResponse: UserResponse?): User {
-        return User(
-            idUser = userResponse?.idUser ?: 0,
-            name = userResponse?.name.orEmpty(),
-            username = userResponse?.username.orEmpty(),
-            email = userResponse?.email.orEmpty(),
-            phone = userResponse?.phone.orEmpty(),
-            website = userResponse?.website.orEmpty(),
-            address = toSingleAddress(userResponse?.address),
-            company = responseToSingleCompany(userResponse?.company)
-        )
-    }
-
-    private fun toSingleAddress(addressResponse: AddressResponse?): Address {
-        return Address(
-            street = addressResponse?.street.orEmpty(),
-            suite = addressResponse?.suite.orEmpty(),
-            zipcode = addressResponse?.zipcode.orEmpty(),
-            geo = responseToSingleGeo(addressResponse?.geo),
-        )
-    }
-
-    private fun responseToSingleCompany(companyResponse: CompanyResponse?): Company {
-        return Company(
-            nameCompany = companyResponse?.nameCompany.orEmpty(),
-            catchPhrase = companyResponse?.catchPhrase.orEmpty(),
-            bs = companyResponse?.bs.orEmpty(),
-        )
-    }
-
-    private fun responseToSingleGeo(geoResponse: GeoResponse?): Geo {
-        return Geo(
-            lat = geoResponse?.lat.orEmpty(),
-            lng = geoResponse?.lng.orEmpty()
-        )
-    }
-
-    fun responseToPostList(postResponseList: List<PostResponse>): List<Post> {
+    fun dtoPostsToPostList(postResponseList: List<DtoPost>): List<Post> {
         val postList = ArrayList<Post>()
         postResponseList.map {
-            postList.add(responseToSinglePost(it))
+            postList.add(dtoPostToSinglePost(it))
         }
         return postList
     }
 
-    private fun responseToSinglePost(postResponse: PostResponse?): Post {
+    private fun dtoPostToSinglePost(postResponse: DtoPost?): Post {
         return Post(
             body = postResponse?.body.orEmpty(),
             title = postResponse?.title.orEmpty(),
@@ -63,31 +23,31 @@ object Mapper {
         )
     }
 
-    fun responseToPostListCache(postResponseList: List<PostResponse>): List<PostCache> {
-        val postList = ArrayList<PostCache>()
+    fun dtoPostToListEntityPost(postResponseList: List<DtoPost>): List<EntityPost> {
+        val postList = ArrayList<EntityPost>()
         postResponseList.map {
-            postList.add(responseToSinglePostCache(it))
+            postList.add(dtoPostToSingleEntityPost(it))
         }
         return postList
     }
 
-    private fun responseToSinglePostCache(postResponse: PostResponse?): PostCache {
-        return PostCache(
+    private fun dtoPostToSingleEntityPost(postResponse: DtoPost?): EntityPost {
+        return EntityPost(
             body = postResponse?.body.orEmpty(),
             title = postResponse?.title.orEmpty(),
             userId = postResponse?.userId ?: 0
         )
     }
 
-    fun cacheToPostList(postListCache: List<PostCache>): List<Post> {
+    fun entityPostsToPostList(postListCache: List<EntityPost>): List<Post> {
         val postList = ArrayList<Post>()
         postListCache.map {
-            postList.add(cacheToSinglePost(it))
+            postList.add(entityPostToSinglePost(it))
         }
         return postList
     }
 
-    private fun cacheToSinglePost(postCache: PostCache?): Post {
+    private fun entityPostToSinglePost(postCache: EntityPost?): Post {
         return Post(
             body = postCache?.body.orEmpty(),
             title = postCache?.title.orEmpty(),
@@ -95,16 +55,16 @@ object Mapper {
         )
     }
 
-    fun responseToUserListCache(userResponseList: List<UserResponse>): List<UserCache> {
-        val userList = ArrayList<UserCache>()
+    fun dtoUserToListEntityUser(userResponseList: List<DtoUser>): List<EntityUser> {
+        val userList = ArrayList<EntityUser>()
         userResponseList.map {
-            userList.add(responseToSingleUserCache(it))
+            userList.add(dtoToSingleEntityUser(it))
         }
         return userList
     }
 
-    private fun responseToSingleUserCache(userResponse: UserResponse?): UserCache {
-        return UserCache(
+    private fun dtoToSingleEntityUser(userResponse: DtoUser?): EntityUser {
+        return EntityUser(
             idLocal = null,
             idUser = userResponse?.idUser ?: 0,
             name = userResponse?.name.orEmpty(),
@@ -112,46 +72,46 @@ object Mapper {
             email = userResponse?.email.orEmpty(),
             phone = userResponse?.phone.orEmpty(),
             website = userResponse?.website.orEmpty(),
-            addressCache = responseToSingleAddressCache(userResponse?.address),
-            companyCache = responseToSingleCompanyCache(userResponse?.company),
+            entityAddress = dtoAddressToSingleEntityAddress(userResponse?.address),
+            companyCache = dtoCompanyToSingleEntityCompany(userResponse?.company),
         )
     }
 
 
-    private fun responseToSingleCompanyCache(companyResponse: CompanyResponse?): CompanyCache {
-        return CompanyCache(
+    private fun dtoCompanyToSingleEntityCompany(companyResponse: DtoCompany?): EntityCompany {
+        return EntityCompany(
             catchPhrase = companyResponse?.catchPhrase.orEmpty(),
             nameCompany = companyResponse?.nameCompany.orEmpty(),
             bs = companyResponse?.bs.orEmpty()
         )
     }
 
-    private fun responseToSingleAddressCache(addressResponse: AddressResponse?): AddressCache {
-        return AddressCache(
+    private fun dtoAddressToSingleEntityAddress(addressResponse: DtoAddress?): EntityAddress {
+        return EntityAddress(
             street = addressResponse?.street.orEmpty(),
             suite = addressResponse?.suite.orEmpty(),
             zipcode = addressResponse?.zipcode.orEmpty(),
-            geoCache = responseToSingleGeoCache(addressResponse?.geo),
+            geoCache = dtoGeoToSingleEntityGeo(addressResponse?.geo),
         )
     }
 
-    private fun responseToSingleGeoCache(geoResponse: GeoResponse?): GeoCache {
-        return GeoCache(
+    private fun dtoGeoToSingleEntityGeo(geoResponse: DtoGeo?): EntityGeo {
+        return EntityGeo(
             lat = geoResponse?.lat.orEmpty(),
             lng = geoResponse?.lng.orEmpty()
         )
     }
 
-    fun responseToCommentListCache(commentResponseList: List<CommentResponse>): List<CommentCache> {
-        val userList = ArrayList<CommentCache>()
+    fun dtoCommentsToListEntityComment(commentResponseList: List<DtoComment>): List<EntityComment> {
+        val userList = ArrayList<EntityComment>()
         commentResponseList.map {
-            userList.add(responseToSingleCommentCache(it))
+            userList.add(dtoCommentToSingleEntityComment(it))
         }
         return userList
     }
 
-    private fun responseToSingleCommentCache(commentResponse: CommentResponse): CommentCache {
-        return CommentCache(
+    private fun dtoCommentToSingleEntityComment(commentResponse: DtoComment): EntityComment {
+        return EntityComment(
             id = 0,
             postId = commentResponse.postId ?: 0,
             name = commentResponse.name.orEmpty(),
@@ -160,7 +120,7 @@ object Mapper {
         )
     }
 
-    fun cacheToSingleUser(user: UserCache?): User {
+    fun entityUserToSingleUser(user: EntityUser?): User {
         return User(
             idUser = user?.idUser ?: 0,
             name = user?.name.orEmpty(),
@@ -168,28 +128,28 @@ object Mapper {
             email = user?.email.orEmpty(),
             phone = user?.phone.orEmpty(),
             website = user?.website.orEmpty(),
-            address = cacheToSingleAddress(user?.addressCache),
-            company = cacheToSingleCompany(user?.companyCache),
+            address = entityAddressToSingleAddress(user?.entityAddress),
+            company = entityCompanyToSingleCompany(user?.companyCache),
         )
     }
 
-    private fun cacheToSingleAddress(addressCache: AddressCache?): Address {
+    private fun entityAddressToSingleAddress(entityAddress: EntityAddress?): Address {
         return Address(
-            street = addressCache?.street.orEmpty(),
-            suite = addressCache?.suite.orEmpty(),
-            zipcode = addressCache?.zipcode.orEmpty(),
-            geo = cacheToSingleGeo(addressCache?.geoCache),
+            street = entityAddress?.street.orEmpty(),
+            suite = entityAddress?.suite.orEmpty(),
+            zipcode = entityAddress?.zipcode.orEmpty(),
+            geo = entityGeoToSingleGeo(entityAddress?.geoCache),
         )
     }
 
-    private fun cacheToSingleGeo(geoCache: GeoCache?): Geo {
+    private fun entityGeoToSingleGeo(geoCache: EntityGeo?): Geo {
         return Geo(
             lat = geoCache?.lat.orEmpty(),
             lng = geoCache?.lng.orEmpty()
         )
     }
 
-    private fun cacheToSingleCompany(companyCache: CompanyCache?): Company {
+    private fun entityCompanyToSingleCompany(companyCache: EntityCompany?): Company {
         return Company(
             nameCompany = companyCache?.nameCompany.orEmpty(),
             catchPhrase = companyCache?.catchPhrase.orEmpty(),
@@ -197,15 +157,15 @@ object Mapper {
         )
     }
 
-    fun cacheToCommentList(commentCacheList: List<CommentCache>?): List<Comment> {
+    fun entityCommentsToCommentList(commentCacheList: List<EntityComment>?): List<Comment> {
         val commentList = ArrayList<Comment>()
         commentCacheList?.map {
-            commentList.add(cacheToSingleComment(it))
+            commentList.add(entityCommentToSingleComment(it))
         }
         return commentList
     }
 
-    private fun cacheToSingleComment(commentCache: CommentCache?): Comment {
+    private fun entityCommentToSingleComment(commentCache: EntityComment?): Comment {
         return Comment(
             postId = commentCache?.postId ?: 0,
             name = commentCache?.name.orEmpty(),
