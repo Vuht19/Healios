@@ -10,9 +10,9 @@ import javax.inject.Inject
 class GetPostDetailUseCase @Inject constructor(private val healiosRepository: HealiosRepository) {
     fun execute(post: Post): Flow<PostDetail> {
         return flow {
-            var postDetail: PostDetail?
-            var user: User?
-            var commentList: List<Comment>?
+            val postDetail: PostDetail?
+            val user: User?
+            val commentList: List<Comment>?
 
             user =
                 Mapper.entityUserToSingleUser(healiosRepository.getUserFromDatabaseById(post.userId))
@@ -24,25 +24,29 @@ class GetPostDetailUseCase @Inject constructor(private val healiosRepository: He
                 )
             postDetail = PostDetail(post, user, commentList)
             emit(postDetail)
+        }
+    }
 
+    fun getPostDetailFromNetwork(post: Post): Flow<PostDetail> {
+        return flow {
             val flowUser = flowOf(healiosRepository.getListUser())
             val flowComment = flowOf(healiosRepository.getLisComment())
 
+            var user: User?
+            var commentList: List<Comment>?
+
             flowUser.zip(flowComment) { userResult, commentResult ->
-                if (userResult is ResultWrapper.Success) {
-                    healiosRepository.saveUserDataInDatabase(
-                        Mapper.dtoUserToListEntityUser(
-                            userResult.value
-                        )
+                healiosRepository.saveUserDataInDatabase(
+                    Mapper.dtoUserToListEntityUser(
+                        userResult.takeValueOrThrow()
                     )
-                }
-                if (commentResult is ResultWrapper.Success) {
-                    healiosRepository.saveCommentDataInDatabase(
-                        Mapper.dtoCommentsToListEntityComment(
-                            commentResult.value
-                        )
+                )
+
+                healiosRepository.saveCommentDataInDatabase(
+                    Mapper.dtoCommentsToListEntityComment(
+                        commentResult.takeValueOrThrow()
                     )
-                }
+                )
             }.onCompletion {
                 user =
                     Mapper.entityUserToSingleUser(healiosRepository.getUserFromDatabaseById(post.userId))
@@ -52,8 +56,7 @@ class GetPostDetailUseCase @Inject constructor(private val healiosRepository: He
                             post.userId
                         )
                     )
-                postDetail = PostDetail(post, user!!, commentList!!)
-                postDetail?.let { it -> emit(it) }
+                emit(PostDetail(post, user!!, commentList!!))
             }.collect()
         }
     }

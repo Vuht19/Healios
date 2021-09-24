@@ -26,13 +26,18 @@ class PostDetailViewModel @Inject constructor(private val getPostDetailUseCase: 
         viewModelScope.launch {
             getPostDetailUseCase.execute(post)
                 .onStart { showLoading() }
-                .onCompletion { hideLoading() }
-                .flowOn(Dispatchers.IO)
+                .onCompletion {
+                    getPostDetailUseCase.getPostDetailFromNetwork(post)
+                        .onCompletion { hideLoading() }
+                        .catch {
+                            showDialogError(it)
+                        }.collect {
+                            postDetailLiveData.postValue(it)
+                        }
+                }.flowOn(Dispatchers.IO)
                 .catch {
-                    Log.e("dladlalsaldada ", "catch: " + it.localizedMessage)
                     showDialogError(it)
                 }.collect {
-                    Log.e("dladlalsaldada ", "collect: " + it.comments.size)
                     postDetailLiveData.postValue(it)
                 }
         }

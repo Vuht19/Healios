@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DtoUser(
     var idLocal: Int?,
-    @SerializedName("idUser")
+    @SerializedName("id")
     var idUser: Int?,
     @SerializedName("name")
     var name: String?,

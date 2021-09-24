@@ -11,7 +11,7 @@ sealed class ResultWrapper<out T> {
 
     @Throws(Exception::class)
     fun takeValueOrThrow(): T {
-         return when (this) {
+        return when (this) {
             is Success -> value
             is GenericError -> throw throwable ?: Throwable()
             is NetworkError -> throw IOException()

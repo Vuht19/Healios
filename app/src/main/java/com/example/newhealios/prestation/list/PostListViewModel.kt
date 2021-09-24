@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +25,15 @@ class PostListViewModel @Inject constructor(val getPostListUseCase: GetPostListU
         viewModelScope.launch {
             getPostListUseCase.execute()
                 .onStart { showLoading() }
-                .onCompletion { hideLoading() }
-                .flowOn(Dispatchers.IO)
+                .onCompletion {
+                    getPostListUseCase.getPostsFromNetwork()
+                        .onCompletion { hideLoading() }
+                        .catch {
+                            showDialogError(it)
+                        }.collect {
+                            postLiveData.postValue(it)
+                        }
+                }.flowOn(Dispatchers.IO)
                 .catch {
                     showDialogError(it)
                 }.collect {
