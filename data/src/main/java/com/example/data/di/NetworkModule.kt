@@ -26,7 +26,6 @@ class NetworkModule {
     @Provides
     fun provideHttpClient(): OkHttpClient {
         val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor())
             .readTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(30, TimeUnit.SECONDS)
         return okHttpClient.build()
@@ -41,7 +40,6 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl(ENDPOINT)
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(okHttpClient)
             .build()
     }

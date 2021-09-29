@@ -18,4 +18,5 @@
     <string name="txt_error_process">There was an error in the execution process, please try again.</string>
     <string name="txt_ok">OK</string>
     <string name="txt_comment_list">Comment List</string>
+    <string name="txt_data_loading">Data loading...</string>
 </resources>

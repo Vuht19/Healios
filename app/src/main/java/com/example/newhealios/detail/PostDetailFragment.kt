@@ -6,11 +6,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newhealios.adapter.CommentAdapter
 import com.example.data.base.Status
 import com.example.newhealios.R
 import com.example.domain.model.Post
 import com.example.domain.model.PostDetail
+import com.example.healios.ui.adapter.CommentAdapter
 import com.example.newhealios.base.BaseFragment
 import com.example.newhealios.list.PostListFragment
 import dagger.hilt.android.AndroidEntryPoint

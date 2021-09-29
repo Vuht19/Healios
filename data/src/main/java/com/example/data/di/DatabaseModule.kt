@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.data.database.dao.UserDao
 import com.example.data.database.AppDatabase
+import com.example.data.database.AppDatabase.Companion.MIGRATION_1_TO_2
 import com.example.data.database.dao.CommentDao
 import com.example.data.database.dao.PostDao
 import dagger.Module
@@ -24,24 +25,6 @@ class DatabaseModule {
             appContext,
             AppDatabase::class.java,
             AppDatabase.DATABASE_NAME
-        ).build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideUserDao(appDatabase: AppDatabase): UserDao? {
-        return appDatabase.userDao()
-    }
-
-    @Singleton
-    @Provides
-    fun providePostDao(appDatabase: AppDatabase): PostDao? {
-        return appDatabase.postDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideCommentDao(appDatabase: AppDatabase): CommentDao? {
-        return appDatabase.commentDao()
+        ).addMigrations(MIGRATION_1_TO_2).build()
     }
 }

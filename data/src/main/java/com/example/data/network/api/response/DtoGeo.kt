@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DtoGeo(
     @SerializedName("lat")
-    var lat: String?,
+    var lat: Double?,
     @SerializedName("lng")
-    var lng: String?
+    var lng: Double?
 )

@@ -3,6 +3,7 @@ package com.example.domain.mapper
 import com.example.data.database.model.*
 import com.example.data.network.api.response.*
 import com.example.domain.model.*
+import android.location.Location
 import java.util.ArrayList
 
 object Mapper {
@@ -17,6 +18,7 @@ object Mapper {
 
     private fun dtoPostToSinglePost(postResponse: DtoPost?): Post {
         return Post(
+            id = postResponse?.id ?: 0,
             body = postResponse?.body.orEmpty(),
             title = postResponse?.title.orEmpty(),
             userId = postResponse?.userId ?: 0
@@ -33,9 +35,11 @@ object Mapper {
 
     private fun dtoPostToSingleEntityPost(postResponse: DtoPost?): EntityPost {
         return EntityPost(
+            idPost = postResponse?.id ?: 0,
             body = postResponse?.body.orEmpty(),
             title = postResponse?.title.orEmpty(),
-            userId = postResponse?.userId ?: 0
+            userId = postResponse?.userId ?: 0,
+//            totalLike = postResponse.totalLike
         )
     }
 
@@ -49,6 +53,7 @@ object Mapper {
 
     private fun entityPostToSinglePost(postCache: EntityPost?): Post {
         return Post(
+            id = postCache?.idPost ?: 0,
             body = postCache?.body.orEmpty(),
             title = postCache?.title.orEmpty(),
             userId = postCache?.userId ?: 0
@@ -97,8 +102,8 @@ object Mapper {
 
     private fun dtoGeoToSingleEntityGeo(geoResponse: DtoGeo?): EntityGeo {
         return EntityGeo(
-            lat = geoResponse?.lat.orEmpty(),
-            lng = geoResponse?.lng.orEmpty()
+            lat = (geoResponse?.lat ?: 0).toDouble(),
+            lng = (geoResponse?.lng ?: 0).toDouble()
         )
     }
 
@@ -138,15 +143,15 @@ object Mapper {
             street = entityAddress?.street.orEmpty(),
             suite = entityAddress?.suite.orEmpty(),
             zipcode = entityAddress?.zipcode.orEmpty(),
-            geo = entityGeoToSingleGeo(entityAddress?.geoCache),
+            location = entityGeoToSingleGeo(entityAddress?.geoCache),
         )
     }
 
-    private fun entityGeoToSingleGeo(geoCache: EntityGeo?): Geo {
-        return Geo(
-            lat = geoCache?.lat.orEmpty(),
-            lng = geoCache?.lng.orEmpty()
-        )
+    private fun entityGeoToSingleGeo(geoCache: EntityGeo?): Location {
+        val location = Location("geo")
+        location.latitude = (geoCache?.lat ?: 0).toDouble()
+        location.longitude = (geoCache?.lng ?: 0).toDouble()
+        return location
     }
 
     private fun entityCompanyToSingleCompany(companyCache: EntityCompany?): Company {

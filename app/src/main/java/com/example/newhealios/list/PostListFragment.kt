@@ -5,12 +5,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newhealios.adapter.PostAdapter
 import com.example.newhealios.callback.ItemPostClick
 import com.example.data.base.Status
 import com.example.newhealios.R
 import com.example.domain.model.Post
-//import com.example.newhealios.domain.usecase.GetUserListUseCase
+import com.example.healios.ui.adapter.PostAdapter
 import com.example.newhealios.base.BaseFragment
 import com.example.newhealios.detail.PostDetailFragment
 import com.example.newhealios.utils.FragmentUtils

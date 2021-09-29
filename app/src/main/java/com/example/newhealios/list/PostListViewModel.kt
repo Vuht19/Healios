@@ -1,5 +1,6 @@
 package com.example.newhealios.list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PostListViewModel @Inject constructor(val getPostListUseCase: GetPostListUseCase) :
+class PostListViewModel @Inject constructor(private val getPostListUseCase: GetPostListUseCase) :
     BaseViewModel() {
 
     private val postLiveData = MutableLiveData<List<Post>>()
