@@ -8,14 +8,14 @@ import com.example.data.database.model.EntityUser
 @Dao
 interface UserDao {
     @Insert
-    fun insertAll(userCaches: List<EntityUser?>)
+    suspend fun insertAll(userCaches: List<EntityUser?>)
 
     @Query("SELECT * FROM users")
-    fun getUsers(): List<EntityUser>
+    suspend fun getUsers(): List<EntityUser>
 
     @Query("SELECT * FROM users WHERE idUser=:id")
-    fun getUserById(id: Int): EntityUser
+    suspend fun getUserById(id: Int): EntityUser
 
     @Query("DELETE FROM users")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

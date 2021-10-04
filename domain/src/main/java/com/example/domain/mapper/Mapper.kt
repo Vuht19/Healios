@@ -125,7 +125,7 @@ object Mapper {
         )
     }
 
-    fun entityUserToSingleUser(user: EntityUser?): User {
+    fun entityUserToSingleUser(user: EntityUser?): User? {
         return User(
             idUser = user?.idUser ?: 0,
             name = user?.name.orEmpty(),

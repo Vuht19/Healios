@@ -1,21 +1,24 @@
 package com.example.newhealios.list
 
-import android.view.View
+import android.util.Log
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newhealios.callback.ItemPostClick
-import com.example.data.base.Status
 import com.example.newhealios.R
 import com.example.domain.model.Post
+import com.example.domain.model.PostResult
 import com.example.healios.ui.adapter.PostAdapter
 import com.example.newhealios.base.BaseFragment
 import com.example.newhealios.detail.PostDetailFragment
 import com.example.newhealios.utils.FragmentUtils
+import com.example.newhealios.utils.view.StableView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_post_list.*
-import java.io.IOException
+import kotlinx.android.synthetic.main.fragment_post_list.view.*
+import kotlinx.android.synthetic.main.stable_layout.view.*
 
 @AndroidEntryPoint
 class PostListFragment : BaseFragment(), ItemPostClick {
@@ -23,6 +26,7 @@ class PostListFragment : BaseFragment(), ItemPostClick {
 
     private val mPostListViewModel: PostListViewModel by viewModels()
     private lateinit var mAdapter: PostAdapter
+    private lateinit var contentView: ViewGroup
 
     companion object {
 
@@ -35,16 +39,21 @@ class PostListFragment : BaseFragment(), ItemPostClick {
         get() = R.layout.fragment_post_list
 
     override fun setupUI() {
-        rvPost.layoutManager = LinearLayoutManager(context)
         mAdapter = context?.let { PostAdapter(it, arrayListOf()) }!!
         mAdapter.seListener(this)
-        rvPost.addItemDecoration(
+        
+        stableView = stateViewContainer
+        stableView.setContentView(flContentView)
+        contentView = stableView.getContentView()
+        contentView.rvPost.layoutManager = LinearLayoutManager(context)
+        contentView.rvPost.addItemDecoration(
             DividerItemDecoration(
                 context,
-                (rvPost.layoutManager as LinearLayoutManager).orientation
+                (contentView.rvPost.layoutManager as LinearLayoutManager).orientation
             )
         )
-        rvPost.adapter = mAdapter
+        contentView.rvPost.adapter = mAdapter
+
         lifecycleScope.launchWhenStarted {
             mPostListViewModel.getPostList()
         }
@@ -52,37 +61,16 @@ class PostListFragment : BaseFragment(), ItemPostClick {
 
     override fun setupObserver() {
         mPostListViewModel.getResourceLiveData().observe(viewLifecycleOwner, {
-            when (it.status) {
-                Status.LOADING -> {
-                    showLoading()
-                    rvPost.visibility = View.GONE
-                }
-                Status.ERROR -> {
-                    //Handle Error
-                    hideLoading()
-
-                    var message = ""
-                    if (it.throwable is IOException) {
-                        message = requireContext().getString(R.string.txt_error_network)
-                    } else {
-                        message = requireContext().getString(R.string.txt_error_process)
-                    }
-                    showDialogAlert(context, message)
-                }
-                else -> Unit
-            }
+            updateStateView(it)
         })
+    }
 
-        mPostListViewModel.getPostLiveData().observe(viewLifecycleOwner, {
-            hideLoading()
-            it?.let { posts -> renderList(posts) }
-            rvPost.visibility = View.VISIBLE
-        })
+    override fun <T> updateViewContentView(data: T) {
+        if (data is PostResult) renderList(data.posList)
     }
 
     private fun renderList(posts: List<Post>) {
         mAdapter.setDataList(posts)
-        mAdapter.notifyDataSetChanged()
     }
 
     override fun onClickItem(pos: Int, post: Post?) {

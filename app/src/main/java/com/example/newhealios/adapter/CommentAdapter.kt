@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Comment
 import com.example.newhealios.R
-import com.example.newhealios.detail.CommentDiffUtilCallback
+import com.example.newhealios.detail.diffutil.CommentDiffUtilCallback
 
 class CommentAdapter(private val mContext: Context, private val mCommentList: ArrayList<Comment>) :
     RecyclerView.Adapter<CommentAdapter.ViewHolder>() {

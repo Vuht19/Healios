@@ -19,4 +19,5 @@
     <string name="txt_ok">OK</string>
     <string name="txt_comment_list">Comment List</string>
     <string name="txt_data_loading">Data loading...</string>
+    <string name="txt_data_empty">Data empty</string>
 </resources>

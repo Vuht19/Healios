@@ -2,23 +2,30 @@ package com.example.newhealios.detail
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.data.base.Status
+import com.example.data.base.ResultWrapper
 import com.example.newhealios.R
 import com.example.domain.model.Post
 import com.example.domain.model.PostDetail
 import com.example.healios.ui.adapter.CommentAdapter
 import com.example.newhealios.base.BaseFragment
 import com.example.newhealios.list.PostListFragment
+import com.example.newhealios.utils.view.StableView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_post_detail.*
+import kotlinx.android.synthetic.main.fragment_post_detail.view.*
+import kotlinx.android.synthetic.main.fragment_post_list.*
+import kotlinx.android.synthetic.main.fragment_post_list.view.*
 import java.io.IOException
 
 @AndroidEntryPoint
 class PostDetailFragment : BaseFragment() {
+
+    private lateinit var contentView: ViewGroup
 
     companion object {
         val TAG = PostListFragment::class.java.simpleName
@@ -45,15 +52,28 @@ class PostDetailFragment : BaseFragment() {
         if (arguments != null && requireArguments().containsKey(BUNDLE_EXTRAS_POST)) {
             mPost = requireArguments().getSerializable(BUNDLE_EXTRAS_POST) as Post
         }
-        rvComment.layoutManager = LinearLayoutManager(context)
-        mCommentAdapter = context?.let { CommentAdapter(it, arrayListOf()) }!!
-        rvComment.addItemDecoration(
+
+        stableView = stateViewDetail
+        stableView.setContentView(llContent)
+        contentView = stableView.getContentView()
+        contentView.rvComment.layoutManager = LinearLayoutManager(context)
+        contentView.rvComment.addItemDecoration(
             DividerItemDecoration(
                 context,
-                (rvComment.layoutManager as LinearLayoutManager).orientation
+                (contentView.rvComment.layoutManager as LinearLayoutManager).orientation
             )
         )
-        rvComment.adapter = mCommentAdapter
+
+        contentView.rvComment.layoutManager = LinearLayoutManager(context)
+
+        mCommentAdapter = context?.let { CommentAdapter(it, arrayListOf()) }!!
+        contentView.rvComment.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                (stableView.rvComment.layoutManager as LinearLayoutManager).orientation
+            )
+        )
+        contentView.rvComment.adapter = mCommentAdapter
 
         ivBack.setOnClickListener {
             activity?.onBackPressed()
@@ -65,42 +85,13 @@ class PostDetailFragment : BaseFragment() {
     }
 
     override fun setupObserver() {
-        mDetailPostViewModel.getResourceLiveData().observe(viewLifecycleOwner, {
-            when (it.status) {
-                Status.LOADING -> {
-                    showLoading()
-                    llContent.visibility = View.GONE
-                }
-                Status.ERROR -> {
-                    //Handle Error
-                    hideLoading()
-
-                    val message: String
-                    message = if (it.throwable is IOException) {
-                        requireContext().getString(R.string.txt_error_network)
-                    } else {
-                        requireContext().getString(R.string.txt_error_process)
-                    }
-                    if (mCommentAdapter.itemCount == 0) {
-                        llContent.visibility = View.INVISIBLE
-                        rvComment.visibility = View.INVISIBLE
-                    }
-                    showDialogAlert(context, message)
-                }
-                Status.EMPTY_DATA -> {
-                    llContent.visibility = View.GONE
-                    rvComment.visibility = View.GONE
-                }
-                else -> Unit
-            }
-        })
-
         mDetailPostViewModel.getPostDetailLiveData().observe(viewLifecycleOwner, {
-            hideLoading()
-            llContent.visibility = View.VISIBLE
-            rvComment.visibility = View.VISIBLE
-            setDataToView(it)
+            updateStateView(it)
         })
+    }
+
+    override fun <T> updateViewContentView(data: T) {
+        if (data is PostDetail) setDataToView(data)
     }
 
     private fun setDataToView(postDetail: PostDetail?) {
@@ -116,9 +107,6 @@ class PostDetailFragment : BaseFragment() {
                 tvCompany.text = user.company.toString()
                 tvAddress.text = user.address.toString()
                 mCommentAdapter.setDataList(it.comments)
-            } else {
-                llContent.visibility = View.INVISIBLE
-                rvComment.visibility = View.INVISIBLE
             }
         }
     }

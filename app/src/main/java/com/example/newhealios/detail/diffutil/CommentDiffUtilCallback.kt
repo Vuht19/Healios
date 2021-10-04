@@ -1,4 +1,4 @@
-package com.example.newhealios.detail
+package com.example.newhealios.detail.diffutil
 
 import androidx.recyclerview.widget.DiffUtil
 import android.os.Bundle

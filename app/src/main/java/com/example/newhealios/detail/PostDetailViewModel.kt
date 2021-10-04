@@ -3,6 +3,7 @@ package com.example.newhealios.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.data.base.ResultWrapper
 import com.example.domain.model.Post
 import com.example.domain.model.PostDetail
 import com.example.domain.usecase.GetPostDetailUseCase
@@ -17,30 +18,19 @@ import javax.inject.Inject
 class PostDetailViewModel @Inject constructor(private val getPostDetailUseCase: GetPostDetailUseCase) :
     BaseViewModel() {
 
-    private val postDetailLiveData = MutableLiveData<PostDetail>()
+    private val postDetailLiveData = MutableLiveData<ResultWrapper<PostDetail>>()
 
     fun getPostDetail(post: Post) {
         viewModelScope.launch {
             getPostDetailUseCase.execute(post)
-                .onStart { showLoading() }
-                .onCompletion {
-                    getPostDetailUseCase.getPostDetailFromNetwork(post)
-                        .onCompletion { hideLoading() }
-                        .catch {
-                            showDialogError(it)
-                        }.collect {
-                            postDetailLiveData.postValue(it)
-                        }
-                }.flowOn(Dispatchers.IO)
-                .catch {
-                    showDialogError(it)
-                }.collect {
+                .flowOn(Dispatchers.IO)
+                .collect {
                     postDetailLiveData.postValue(it)
                 }
         }
     }
 
-    fun getPostDetailLiveData(): LiveData<PostDetail> {
+    fun getPostDetailLiveData(): LiveData<ResultWrapper<PostDetail>> {
         return postDetailLiveData
     }
 }

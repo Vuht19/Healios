@@ -1,24 +1,25 @@
 package com.example.newhealios.base
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.afollestad.materialdialogs.MaterialDialog
+import androidx.lifecycle.MutableLiveData
+import com.example.data.base.ResultWrapper
+import com.example.domain.model.PostResult
 import com.example.newhealios.R
+import com.example.newhealios.utils.view.StableView
+import java.io.IOException
 
 abstract class BaseFragment : Fragment() {
 
-    private var mProgressDialog: MaterialDialog? = null
-    private var mDialog: MaterialDialog? = null
-    private lateinit var mBaseViewModel: BaseViewModel
+    protected lateinit var stableView: StableView
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         return LayoutInflater.from(context).inflate(layout, container, false)
     }
@@ -31,49 +32,43 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun setupUI()
     abstract fun setupObserver()
+    abstract fun <T> updateViewContentView(data: T)
 
     abstract val layout: Int
 
-    protected fun showLoading() {
-        hideLoading()
-        try {
-            context.let {
-                mProgressDialog = MaterialDialog.Builder(it!!)
-                    .content(R.string.msg_please_wait)
-                    .cancelable(false)
-                    .progress(true, 0)
-                    .show()
+    protected fun <T> updateStateView(resultWrapper: ResultWrapper<T>) {
+        val state: Int
+        when (resultWrapper) {
+            is ResultWrapper.Loading -> {
+                state = StableView.VIEW_TYPE_LOADING
             }
-
-        } catch (e: Exception) {
+            is ResultWrapper.NetworkError -> {
+                state = StableView.VIEW_TYPE_ERROR
+                val message: String
+                (requireContext().getString(R.string.txt_error_network)).also {
+                    message = it
+                    stableView.setTextError(message)
+                }
+            }
+            is ResultWrapper.GenericError -> {
+                //Handle Error
+                state = StableView.VIEW_TYPE_ERROR
+                val message: String
+                (if (resultWrapper is IOException) {
+                    requireContext().getString(R.string.txt_error_network)
+                } else {
+                    requireContext().getString(R.string.txt_error_process)
+                }).also {
+                    message = it
+                    stableView.setTextError(message)
+                }
+            }
+            is ResultWrapper.Success -> {
+                state = StableView.VIEW_TYPE_SUCCESS
+                updateViewContentView(resultWrapper.value)
+            }
+            else -> TODO()
         }
-    }
-
-    protected fun hideLoading() {
-        if (mProgressDialog != null && mProgressDialog!!.isShowing) {
-            mProgressDialog!!.dismiss()
-        }
-    }
-
-    open fun showDialogAlert(
-        context: Context?,
-        content: String,
-    ) {
-        if (context == null) {
-            return
-        }
-        hideDialogAlert()
-        if (mDialog == null) {
-            mDialog = MaterialDialog.Builder(context)
-                .content(content)
-                .cancelable(false)
-                .positiveText(context.getString(R.string.txt_ok))
-                .build()
-        }
-        mDialog?.show()
-    }
-
-    fun hideDialogAlert() {
-        mDialog?.dismiss()
+        stableView.setStateView(state)
     }
 }

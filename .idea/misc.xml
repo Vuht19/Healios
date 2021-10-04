@@ -6,11 +6,14 @@
         <entry key="..\:/Healios/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.13802083333333334" />
         <entry key="..\:/Healios/app/src/main/res/drawable/ic_baseline_comment_24.xml" value="0.25833333333333336" />
         <entry key="..\:/Healios/app/src/main/res/layout/activity_main.xml" value="0.121875" />
-        <entry key="..\:/Healios/app/src/main/res/layout/fragment_post_detail.xml" value="0.4" />
-        <entry key="..\:/Healios/app/src/main/res/layout/fragment_post_list.xml" value="0.4" />
+        <entry key="..\:/Healios/app/src/main/res/layout/fragment_post_detail.xml" value="0.2" />
+        <entry key="..\:/Healios/app/src/main/res/layout/fragment_post_list.xml" value="0.176" />
         <entry key="..\:/Healios/app/src/main/res/layout/item_comment.xml" value="0.4" />
         <entry key="..\:/Healios/app/src/main/res/layout/item_post.xml" value="0.264" />
         <entry key="..\:/Healios/app/src/main/res/layout/item_test.xml" value="0.1" />
+        <entry key="..\:/Healios/app/src/main/res/layout/loading.xml" value="0.2421875" />
+        <entry key="..\:/Healios/app/src/main/res/layout/post_view.xml" value="0.11778115501519756" />
+        <entry key="..\:/Healios/app/src/main/res/layout/stable_layout.xml" value="0.4" />
         <entry key="..\:/PROJECT/NewHealios2/app/src/main/res/layout/activity_main.xml" value="0.1" />
       </map>
     </option>

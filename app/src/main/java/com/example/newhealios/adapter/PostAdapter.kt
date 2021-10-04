@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newhealios.R
-import com.example.newhealios.list.PostDiffUtilCallback
+import com.example.newhealios.list.diffutil.PostDiffUtilCallback
 
 import android.os.Bundle
 import com.example.domain.model.Post
 import com.example.newhealios.callback.ItemPostClick
-import com.example.newhealios.list.PostDiffUtilCallback.Companion.EXTRA_BODY
-import com.example.newhealios.list.PostDiffUtilCallback.Companion.EXTRA_TITLE
+import com.example.newhealios.list.diffutil.PostDiffUtilCallback.Companion.EXTRA_BODY
+import com.example.newhealios.list.diffutil.PostDiffUtilCallback.Companion.EXTRA_TITLE
 
 
 class PostAdapter(private val mContext: Context, private val mPostList: ArrayList<Post>) :

@@ -16,7 +16,7 @@ import javax.inject.Inject
 class HealiosRepository @Inject constructor(
     private val healiosService: HealiosService,
     private val appDatabase: AppDatabase,
-    private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher,
 ) {
     /**
      * Cloud
@@ -42,36 +42,36 @@ class HealiosRepository @Inject constructor(
     /*
     * Local
     * */
-    fun savePostInDatabase(postCacheList: List<EntityPost>) {
+    suspend fun savePostInDatabase(postCacheList: List<EntityPost>) {
         if (!postCacheList.isNullOrEmpty()) {
             appDatabase.postDao()?.deleteAll()
             appDatabase.postDao()?.insertAll(postCacheList)
         }
     }
 
-    fun getPostListFromDatabase(): List<EntityPost>? {
+    suspend fun getPostListFromDatabase(): List<EntityPost>? {
         return appDatabase.postDao()?.getPostList()
     }
 
-    fun saveUserDataInDatabase(userCacheList: List<EntityUser>) {
+    suspend fun saveUserDataInDatabase(userCacheList: List<EntityUser>) {
         if (!userCacheList.isNullOrEmpty()) {
             appDatabase.userDao()?.deleteAll()
             appDatabase.userDao()?.insertAll(userCacheList)
         }
     }
 
-    fun saveCommentDataInDatabase(commentList: List<EntityComment>) {
+    suspend fun saveCommentDataInDatabase(commentList: List<EntityComment>) {
         if (!commentList.isNullOrEmpty()) {
             appDatabase.commentDao()?.deleteAll()
             appDatabase.commentDao()?.insertAll(commentList)
         }
     }
 
-    fun getUserFromDatabaseById(id: Int): EntityUser? {
+    suspend fun getUserFromDatabaseById(id: Int): EntityUser? {
         return appDatabase.userDao()?.getUserById(id)
     }
 
-    fun getCommentListFromDatabaseById(id: Int): List<EntityComment>? {
+    suspend fun getCommentListFromDatabaseById(id: Int): List<EntityComment>? {
         return appDatabase.commentDao()?.getCommentsById(id)
     }
 }

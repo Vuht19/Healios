@@ -8,11 +8,11 @@ import com.example.data.database.model.EntityPost
 @Dao
 interface PostDao {
     @Insert
-    fun insertAll(postCaches: List<EntityPost>)
+    suspend fun insertAll(postCaches: List<EntityPost>)
 
     @Query("SELECT * FROM posts")
-    fun getPostList(): List<EntityPost>
+    suspend fun getPostList(): List<EntityPost>
 
     @Query("DELETE FROM posts")
-    fun deleteAll()
+    suspend fun deleteAll()
 }
