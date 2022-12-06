@@ -62,8 +62,8 @@ class StableView : FrameLayout {
             }
             VIEW_TYPE_SUCCESS -> {
                 mBinding.llContainerLoading.visibility = GONE
-                contentView.visibility = VISIBLE
-                mBinding.flContainerError.visibility = GONE
+//                contentView.visibility = VISIBLE
+//                mBinding.flContainerError.visibility = GONE
                 mBinding.flContainerEmpty.visibility = GONE
             }
         }
