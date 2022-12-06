@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager,
                 PostListFragment.newInstance(),
                 R.id.container,
-                false,
+                true,
                 TAG
             )
         }
