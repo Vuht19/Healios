@@ -41,6 +41,10 @@ class StableView : FrameLayout {
     }
 
     fun setStateView(state: Int) {
+        mBinding.llContainerLoading.visibility = VISIBLE
+        mBinding.flContainerError.visibility = GONE
+        mBinding.flContainerEmpty.visibility = GONE
+        contentView.visibility = GONE
         when (state) {
             VIEW_TYPE_ERROR -> {
                 mBinding.flContainerError.visibility = VISIBLE
@@ -62,8 +66,8 @@ class StableView : FrameLayout {
             }
             VIEW_TYPE_SUCCESS -> {
                 mBinding.llContainerLoading.visibility = GONE
-//                contentView.visibility = VISIBLE
-//                mBinding.flContainerError.visibility = GONE
+                contentView.visibility = VISIBLE
+                mBinding.flContainerError.visibility = GONE
                 mBinding.flContainerEmpty.visibility = GONE
             }
         }
